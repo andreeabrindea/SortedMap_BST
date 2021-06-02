@@ -5,7 +5,6 @@
 using namespace std;
 
 SMIterator::SMIterator(const SortedMap& m) : map(m), stack{std::stack<BSTNode*>{} }{
-    currentNode = new BSTNode();
     bt = m.tree;
     currentNode = bt.root;
     m.tree_to_stack(bt.root, stack);
