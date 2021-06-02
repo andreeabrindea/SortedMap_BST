@@ -59,7 +59,7 @@ private:
         else if (node->info.first < e)
             return search_rec(node->right, e);
         else
-            return search_rec(node->left,e);
+            return search_rec(node->left, e);
     }//Complexity: O(n)
 
     BSTNode* findMinimum(BSTNode* currentNode)
@@ -73,13 +73,14 @@ private:
         return currentNode;
     }
 
-    void doomTheTree(BSTNode* root){
+    BSTNode *doomTheTree(BSTNode *root){
         if(root == nullptr)
-            return;
+            return root;
 
-        doomTheTree(root->right);
-        doomTheTree(root->left);
+        root->right = doomTheTree(root->right);
+        root->left = doomTheTree(root->left);
         delete root;
+        return nullptr;
     }
 
 public:
