@@ -19,9 +19,7 @@ TValue SortedMap::add(TKey k, TValue v) {
         return result;
     }
 
-    if(this->insert_rec(this->tree.root, std::make_pair(k,v)) == nullptr)
-        return -1;
-
+    this->tree.root = this->insert_rec(this->tree.root, std::make_pair(k,v));
     sizeOfBST++;
 
     return result;
@@ -40,9 +38,8 @@ TValue SortedMap::remove(TKey k) {
     if(current != nullptr) {
         TValue result = current->info.second;
         if (current->left == nullptr && current->right == nullptr){
-            delete current;
+            current = nullptr;
         }// if the node we want to remove is a leaf
-
         else if (current->left == nullptr && current->right != nullptr){
             *current = *(current->right);
         }
@@ -52,7 +49,8 @@ TValue SortedMap::remove(TKey k) {
         else{
             BSTNode *minimum = findMinimum(current->right);
             current->info = minimum->info;
-            delete minimum;
+            remove(minimum->info.first);
+            minimum = nullptr;
         }
 
         this->sizeOfBST--;
@@ -67,8 +65,8 @@ void SortedMap::tree_to_stack(BSTNode *root, std::stack<BSTNode*> &stack) const 
     }
 
     tree_to_stack(root->left, stack);
-    tree_to_stack(root->right, stack);
     stack.push(root);
+    tree_to_stack(root->right, stack);
 }
 
 int SortedMap::size() const {
