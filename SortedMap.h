@@ -5,6 +5,7 @@
 typedef int TKey;
 typedef int TValue;
 #include <utility>
+#include <stack>
 typedef std::pair<TKey, TValue> TElem;
 #define NULL_TVALUE -111111
 #define NULL_TPAIR pair<TKey, TValue>(-111111, -111111);
@@ -39,12 +40,12 @@ private:
     }
 
     //insert operation - recursive implementation
-    BSTNode *insert_rec(BSTNode* &node, TElem e){
+    BSTNode *insert_rec(BSTNode *node, TElem e){
         if(node == nullptr)
             node = initNode(e);
-        else if (node->info >= e)
+        else if (node->info.first > e.first)
             node->left = insert_rec(node->left, e);
-        else if (node->info < e)
+        else if (node->info.first < e.first)
             node->right = insert_rec(node->right, e);
 
         return node;
@@ -65,18 +66,17 @@ private:
     {
         if(currentNode == nullptr)
             return currentNode;
-        else
-            while(currentNode->left!= nullptr)
-                currentNode = currentNode->left;
-//            TElem minimum;
-//            minimum = currentNode->info;
 
-            return currentNode;
+        while(currentNode->left != nullptr)
+            currentNode = currentNode->left;
+
+        return currentNode;
     }
 
     void doomTheTree(BSTNode* root){
         if(root == nullptr)
             return;
+
         doomTheTree(root->right);
         doomTheTree(root->left);
         delete root;
@@ -111,4 +111,6 @@ public:
 
     // destructor
     ~SortedMap();
+
+    void tree_to_stack(BSTNode*, std::stack<BSTNode*>&) const;
 };
