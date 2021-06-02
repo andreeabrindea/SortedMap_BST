@@ -5,18 +5,15 @@
 using namespace std;
 
 SMIterator::SMIterator(const SortedMap& m) : map(m), stack{std::stack<BSTNode*>{} }{
-    first();
+    currentNode = new BSTNode();
+    bt = m.tree;
+    currentNode = bt.root;
+    m.tree_to_stack(bt.root, stack);
     //TODO - Implementation
-
 }
 
 void SMIterator::first() {
     //TODO - Implementation
-    currentNode = bt.root;
-    while(currentNode!= nullptr) {
-        stack.push(currentNode);
-        //currentNode = tree.currentNode.left;
-    }
     if(!stack.empty())
         currentNode = stack.top();
     else
@@ -28,16 +25,7 @@ void SMIterator::next(){
     if(!valid())
         throw exception();
 
-    BSTNode* node = stack.top();
     stack.pop();
-
-    if(node->right!= nullptr)
-        node = node->right;
-
-    while(node!= nullptr){
-        stack.push(node);
-        node = node->left;
-    }
 
     if(!stack.empty())
         currentNode = stack.top();
@@ -55,6 +43,9 @@ bool SMIterator::valid() const{
 
 TElem SMIterator::getCurrent() const{
     //TODO - Implementation
+    if(currentNode == nullptr)
+        return NULL_TPAIR;
+
     return currentNode->info;
 }
 
